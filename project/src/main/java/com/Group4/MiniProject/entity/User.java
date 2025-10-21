@@ -1,0 +1,32 @@
+package com.Group4.MiniProject.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "user")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 5, nullable = false)
+    private String nickname;
+
+    @Column(length = 10, nullable = false)
+    private String password;
+
+    // User : Ingredient = 1 : 1
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Ingredient Ingredient;
+
+    // User : Message = 1 : N
+    @OneToMany(mappedBy = "receivedUser", cascade = CascadeType.ALL)
+    private java.util.List<Message> receivedMessages;
+}
