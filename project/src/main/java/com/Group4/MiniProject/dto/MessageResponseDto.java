@@ -16,4 +16,5 @@ public class MessageResponseDto {
 	private UUID id;
     private String content;
     private String sender;
+    private Integer theme;
 }

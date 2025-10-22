@@ -13,6 +13,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
     List<Message> findByReceivedUserId(Long userId);
     
     // 메세지 개별 조회
-//    Optional<Message> findByIdAndReceiverId(UUID id, UUID receiverId);
+//    Optional<Message> findById(UUID id, UUID receiverId);
 }
 

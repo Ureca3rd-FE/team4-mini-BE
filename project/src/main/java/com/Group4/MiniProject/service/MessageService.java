@@ -29,6 +29,7 @@ public class MessageService {
                 .id(message.getId())
                 .content(message.getMessage()) // 엔티티의 message 필드
                 .sender(message.getNickname()) // nickname = 보낸 사람
+                .theme(message.getTheme())
                 .build();
     }
 }
