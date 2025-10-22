@@ -21,5 +21,5 @@ public class MessageController {
     public ResponseEntity<MessageResponseDto> getMessageDetail(@PathVariable UUID messageId) {
         MessageResponseDto message = messageService.getMessageDetail(messageId);
         return ResponseEntity.ok(message);
-    }
+    }  
 }

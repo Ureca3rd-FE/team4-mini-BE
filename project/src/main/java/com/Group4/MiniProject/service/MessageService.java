@@ -27,8 +27,8 @@ public class MessageService {
 
         return MessageResponseDto.builder()
                 .id(message.getId())
-                .content(message.getMessage()) // 엔티티의 message 필드
-                .sender(message.getNickname()) // nickname = 보낸 사람
+                .content(message.getMessage())
+                .sender(message.getNickname())
                 .theme(message.getTheme())
                 .build();
     }
