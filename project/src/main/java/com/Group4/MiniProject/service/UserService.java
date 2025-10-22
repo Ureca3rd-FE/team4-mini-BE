@@ -3,6 +3,7 @@ package com.Group4.MiniProject.service;
 import com.Group4.MiniProject.dto.UserRequestDto;
 import com.Group4.MiniProject.entity.User;
 import com.Group4.MiniProject.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,4 +33,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public String login(UserRequestDto requestDto) {
+        if (requestDto.getNickname() == null || requestDto.getNickname().trim().isEmpty()) {
+            throw new IllegalArgumentException("닉네임을 입력해주세요.");
+        }
+        if (requestDto.getPassword() == null || requestDto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+        }
+        User user = userRepository.findByNickname(requestDto.getNickname())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 닉네임입니다."));
+        if (!user.getPassword().equals(requestDto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        return user.getNickname();
+    }
 }

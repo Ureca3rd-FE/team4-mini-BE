@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 public class UserResponseDto {
     private String message;
 
-    public static UserResponseDto Ok() {
+    public static UserResponseDto ok() {
         return new UserResponseDto("Ok");
     }
 }
