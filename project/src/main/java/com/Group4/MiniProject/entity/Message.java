@@ -2,7 +2,8 @@ package com.Group4.MiniProject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
+
+// --- UUID 관련 import는 모두 삭제 ---
 
 @Entity
 @Getter
@@ -13,9 +14,14 @@ import java.util.UUID;
 @Table(name = "message")
 public class Message {
 
+    /**
+     * 'index' (자동 증가 숫자) 형태의 ID를 사용합니다.
+     * DB 컬럼명은 ERD에 맞게 "message_id"로 지정합니다.
+     */
     @Id
     @GeneratedValue
-    private UUID id;
+    @JoinColumn(name = "message_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "theme_id")
@@ -28,8 +34,10 @@ public class Message {
     @Column(length = 500)
     private String message;
 
+    @Column(name = "is_open") // ERD 및 DB 표준에 맞게 'is_open'으로 지정
     private boolean isOpen;
 
-    @Column(length = 5)
+    // 닉네임 글자수 제한 없음
+    @Column(length = 100)
     private String nickname;
 }
