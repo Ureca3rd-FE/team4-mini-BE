@@ -1,5 +1,6 @@
 package com.Group4.MiniProject.service;
 
+import com.Group4.MiniProject.dto.UserDeleteRequestDto;
 import com.Group4.MiniProject.dto.UserRequestDto;
 import com.Group4.MiniProject.entity.User;
 import com.Group4.MiniProject.repository.UserRepository;
@@ -47,5 +48,13 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return user.getNickname();
+    }
+    public void withdraw(UserDeleteRequestDto requestDto) {
+        User user = userRepository.findByNickname(requestDto.getNickname())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 닉네임입니다."));
+        if (!user.getPassword().equals(requestDto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        userRepository.delete(user);
     }
 }
