@@ -15,5 +15,6 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 🛠TODO: change to STRING or ENUM TYPE
     private Long themeId;
+    private String name;
     private String imgUrl;
 }
