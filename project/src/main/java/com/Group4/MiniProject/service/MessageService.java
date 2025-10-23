@@ -37,11 +37,15 @@ public class MessageService {
                         HttpStatus.NOT_FOUND, "해당 메시지를 찾을 수 없습니다."
                 ));
 
-        return MessageResponseDto.builder()
-                .message(message.getMessage())
-                .nickname(message.getNickname())
-                .themeId(message.getTheme().getThemeId())
-                .build();
+        // DTO로 변환하여 반환
+        return new MessageResponseDto(message);
+
+        // 빌더 패턴이 null 값으로 보내주게 되어 주석 차리
+//        return MessageResponseDto.builder()
+//                .message(message.getMessage())
+//                .nickname(message.getNickname())
+//                .themeId(message.getTheme().getThemeId())
+//                .build();
     }
 
     // 메시지 작성 및 재료 지급
