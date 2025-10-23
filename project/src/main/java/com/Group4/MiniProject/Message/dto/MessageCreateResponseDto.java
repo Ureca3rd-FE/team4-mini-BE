@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageResponseDto {
+public class MessageCreateResponseDto {
     private Long longId;
     private UUID uuid;
     private String message;
@@ -24,7 +24,7 @@ public class MessageResponseDto {
     @JsonIgnoreProperties({"receivedMessages", "ingredient"})
     private User receivedUser;
 
-    public MessageResponseDto(Message message) {
+    public MessageCreateResponseDto(Message message) {
         this.longId = message.getId();
         this.uuid = message.getUuid();
         this.receivedUser = message.getReceivedUser();
