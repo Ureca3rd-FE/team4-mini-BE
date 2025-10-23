@@ -9,10 +9,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MessageRepository extends JpaRepository<Message, UUID> {
-    List<Message> findByReceivedUserId(Long userId);
-    
-    // 메세지 개별 조회
-//    Optional<Message> findById(UUID id, UUID receiverId);
-}
+public interface MessageRepository extends JpaRepository<Message, Long> {
 
+    // 메시지 조회
+    List<Message> findByReceivedUserId(Long userId);
+
+    // 메시지 개별 조회
+    Optional<Message> findByUuid(UUID uuid);
+
+    // Long PK + 수신자 기준 조회 (필요 시)
+    //Optional<Message> findByIdAndReceivedUserId(Long id, Long receiverId);
+}
