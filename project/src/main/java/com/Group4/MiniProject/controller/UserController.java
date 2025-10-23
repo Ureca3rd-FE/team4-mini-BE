@@ -63,6 +63,25 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody UserRequestDto requestDto) {
+        try {
+            String nickname = userService.login(requestDto);
+
+            return ResponseEntity.ok(LoginResponseDto.success(nickname));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponseDto(e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("서버 에러 발생."));
+        }
+    } //TODO: withdraw 구현 필요
+
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("API 서버가 정상 작동 중입니다.");
