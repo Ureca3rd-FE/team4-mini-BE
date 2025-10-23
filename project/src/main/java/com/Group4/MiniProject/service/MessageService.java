@@ -36,18 +36,19 @@ public class MessageService {
     @Transactional
     public void createMessage(MessageRequestDto requestDto, String senderNickname) {
 
-
+        // 송신자 닉네임으로 User 엔티티 조회
         User receiver = userRepository.findByNickname(requestDto.getReceivedNickname()).orElseThrow(
                 () -> new IllegalArgumentException("해당 닉네임의 사용자를 찾을 수 없습니다.")
         );
 
+        // 테마 ID로 Theme 엔티티 조회
         Theme theme = themeRepository.findById(requestDto.getThemeId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 ID의 테마를 찾을 수 없습니다.")
         );
 
-
+        // Message 엔티티 생성
         Message message = Message.builder()
-                .message(requestDto.getMessage())
+                .message(requestDto.getMessage())   // 메시지 본문 설정
                 .nickname(senderNickname)           // 보낸 사람 닉네임 설정
                 .isOpen(false)                      // 최초 상태는 항상 '안 읽음'
                 .receivedUser(receiver)             // 연관관계 설정 (수신자)
@@ -56,12 +57,13 @@ public class MessageService {
 
         messageRepository.save(message);            // DB에 메시지 INSERT
 
-
+        // 수신자의 재료 정보 조회
         Ingredient ingredient = ingredientRepository.findByUserId(receiver.getId()).orElseThrow(
                 () -> new IllegalArgumentException("사용자의 재료 정보를 찾을 수 없습니다.")
         );
 
-        List<String> ingredientNames = Arrays.asList("snow", "rock", "carrot", "branch", "neck");
+        // 랜덤으로 3개의 재료를 지급
+        List<String> ingredientNames = Arrays.asList("snow", "rock", "carrot", "branch", "muffler"); // neck -> muffler로 수정
         Random random = new Random();
 
         for (int i = 0; i < 3; i++) { // 3번 반복
@@ -79,7 +81,7 @@ public class MessageService {
                 case "branch":
                     ingredient.setBranch(ingredient.getBranch() + 1);
                     break;
-                case "neck":
+                case "muffler":
                     ingredient.setNeck(ingredient.getNeck() + 1);
                     break;
             }
