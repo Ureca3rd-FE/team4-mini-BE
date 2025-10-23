@@ -108,4 +108,8 @@ public class MessageService {
                 .map(MessageListResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    public Long getUnopenedMessageCount(Long userId) {
+        return messageRepository.countByReceivedUserIdAndIsOpenFalse(userId);
+    }
 }

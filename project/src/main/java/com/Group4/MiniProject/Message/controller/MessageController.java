@@ -29,7 +29,7 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<List<MessageListResponseDto>> getMessageList(
-            @RequestParam(name = "userId") Long userId // 닉네임을 쿼리 파라미터로 받습니다.
+            @RequestParam(name = "userId") Long userId // userId 쿼리 파라미터로 받습니다.
     ) {
         // Service 메서드 호출
         List<MessageListResponseDto> messages =
@@ -37,6 +37,15 @@ public class MessageController {
 
         return ResponseEntity.ok(messages);
     }
+
+    @GetMapping("/unopened")
+    public ResponseEntity<Long> getUnopenedMessageCount(
+            @RequestParam(name = "userId") Long userId // userId 쿼리 파라미터로 받습니다.
+    ) {
+        Long count = messageService.getUnopenedMessageCount(userId);
+        return ResponseEntity.ok(count);
+    }
+
 
     // 메시지 개별 조회
     @GetMapping("/{messageId}")
