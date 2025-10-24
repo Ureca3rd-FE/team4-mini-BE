@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MessageRequestDto {
+public class MessageCreateRequestDto {
 
     private Long themeId;
 

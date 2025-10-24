@@ -1,8 +1,9 @@
 package com.Group4.MiniProject.Message.service;
 
-import com.Group4.MiniProject.Message.dto.MessageRequestDto;
-import com.Group4.MiniProject.Message.dto.MessageResponseDto;
+import com.Group4.MiniProject.Message.dto.MessageCreateRequestDto;
+import com.Group4.MiniProject.Message.dto.MessageCreateResponseDto;
 import com.Group4.MiniProject.Ingredient.entity.Ingredient;
+import com.Group4.MiniProject.Message.dto.MessageListResponseDto;
 import com.Group4.MiniProject.Message.entity.Message;
 import com.Group4.MiniProject.Theme.entity.Theme;
 import com.Group4.MiniProject.User.entity.User;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +33,14 @@ public class MessageService {
     private final IngredientRepository ingredientRepository;
 
     // 메시지 개별 조회
-    public MessageResponseDto getMessageDetail(UUID messageId) {
+    public MessageCreateResponseDto getMessageDetail(UUID messageId) {
         Message message = messageRepository.findByUuid(messageId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "해당 메시지를 찾을 수 없습니다."
                 ));
 
         // DTO로 변환하여 반환
-        return new MessageResponseDto(message);
+        return new MessageCreateResponseDto(message);
 
         // 빌더 패턴이 null 값으로 보내주게 되어 주석 차리
 //        return MessageResponseDto.builder()
@@ -56,7 +58,7 @@ public class MessageService {
     * @param senderNickname 메시지를 보내는 사람(로그인한 유저)의 닉네임
     */
     @Transactional
-    public void createMessage(MessageRequestDto requestDto, String senderNickname) {
+    public void createMessage(MessageCreateRequestDto requestDto, String senderNickname) {
 
         // 수신자 조회
         User receiver = userRepository.findByNickname(requestDto.getReceivedNickname())
@@ -96,5 +98,18 @@ public class MessageService {
         }
 
         ingredientRepository.save(ingredient);
+    }
+
+    public List<MessageListResponseDto> getMessageListByUserIdAndOpenStatus(Long userId) {
+        // userId와 isOpen=true를 조건으로 사용
+        List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenTrue(userId);
+        // 엔티티 리스트를 DTO 리스트로 변환하여 반환
+        return messages.stream()
+                .map(MessageListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public Long getUnopenedMessageCount(Long userId) {
+        return messageRepository.countByReceivedUserIdAndIsOpenFalse(userId);
     }
 }
