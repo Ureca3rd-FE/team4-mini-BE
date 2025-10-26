@@ -1,5 +1,6 @@
 package com.Group4.MiniProject.User.controller;
 
+import com.Group4.MiniProject.User.dto.UserDeleteRequestDto;
 import com.Group4.MiniProject.User.dto.UserRequestDto;
 import com.Group4.MiniProject.User.dto.UserResponseDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;
@@ -64,23 +65,20 @@ public class UserController {
     }
 
     @DeleteMapping("/withdraw")
-    public ResponseEntity<?> withdraw(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<?> withdraw(@RequestBody UserDeleteRequestDto requestDto) {
         try {
-            String nickname = userService.login(requestDto);
-
-            return ResponseEntity.ok(LoginResponseDto.success(nickname));
-
+            userService.deleteUser(requestDto);
+            return ResponseEntity.ok(UserDeleteRequestDto.ok());
         } catch (IllegalArgumentException e) {
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseDto(e.getMessage()));
-
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDto("서버 에러 발생."));
         }
-    } //TODO: withdraw 구현 필요
+    }
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {

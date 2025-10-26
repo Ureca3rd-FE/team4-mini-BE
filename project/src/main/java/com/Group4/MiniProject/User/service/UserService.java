@@ -1,5 +1,6 @@
 package com.Group4.MiniProject.User.service;
 
+import com.Group4.MiniProject.User.dto.UserDeleteRequestDto;
 import com.Group4.MiniProject.User.dto.UserRequestDto;
 import com.Group4.MiniProject.Ingredient.entity.Ingredient;
 import com.Group4.MiniProject.User.entity.User;
@@ -74,5 +75,28 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return user.getNickname();
+    }
+    @Transactional
+    public void deleteUser(UserDeleteRequestDto requestDto) {
+        // JWT가 없기 때문에 닉네임과 비밀번호로 본인 확인
+        // JWT를 적용한다면 유효성 검사 없이 삭제 가능합니다
+        if (requestDto.getNickname() == null || requestDto.getNickname().trim().isEmpty()) {
+            throw new IllegalArgumentException("닉네임을 입력해주세요.");
+        }
+        if (requestDto.getPassword() == null || requestDto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+        }
+        User user = userRepository.findByNickname(requestDto.getNickname())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 닉네임입니다."));
+
+        if (!user.getPassword().equals(requestDto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        //Ingredient를 먼저 삭제후 delete 진행합니다
+        Ingredient ingredient = user.getIngredient();
+        if (ingredient != null) {
+            ingredientRepository.delete(ingredient);
+        }
+        userRepository.delete(user);
     }
 }
