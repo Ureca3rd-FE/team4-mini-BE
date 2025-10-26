@@ -1,4 +1,4 @@
-package com.Group4.MiniProject.dto;
+package com.Group4.MiniProject.User.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
