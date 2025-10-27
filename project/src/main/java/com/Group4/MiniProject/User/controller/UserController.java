@@ -1,5 +1,6 @@
 package com.Group4.MiniProject.User.controller;
 
+import com.Group4.MiniProject.User.dto.UserDeleteRequestDto;
 import com.Group4.MiniProject.User.dto.UserRequestDto;
 import com.Group4.MiniProject.User.dto.UserResponseDto;
 import com.Group4.MiniProject.User.dto.LoginResponseDto;
@@ -56,6 +57,22 @@ public class UserController {
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponseDto(e.getMessage()));
 
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDto("서버 에러 발생."));
+        }
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody UserDeleteRequestDto requestDto) {
+        try {
+            userService.deleteUser(requestDto);
+            return ResponseEntity.ok(UserDeleteRequestDto.ok());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponseDto(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
