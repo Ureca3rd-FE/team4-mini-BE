@@ -103,6 +103,9 @@ public class MessageService {
     public List<MessageListResponseDto> getMessageListByUserIdAndOpenStatus(Long userId) {
         // userId와 isOpen=true를 조건으로 사용
         List<Message> messages = messageRepository.findByReceivedUserIdAndIsOpenTrue(userId);
+        if (messages.isEmpty()) {
+            throw new IllegalArgumentException("열린 메시지가 존재하지 않습니다.");
+        }
         // 엔티티 리스트를 DTO 리스트로 변환하여 반환
         return messages.stream()
                 .map(MessageListResponseDto::new)
